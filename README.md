@@ -4,3 +4,5 @@ We will learn how to use FluentAssertions package for testing function in C#
 
 ## FluentAssertions Package
 Let see more information for unit test package at: https://fluentassertions.com/introduction
+## Add FakeIteasy Package
+This package we gonna use for fake Dependence injection implementation for testing
