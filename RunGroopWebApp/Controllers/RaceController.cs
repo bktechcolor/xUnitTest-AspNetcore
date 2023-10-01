@@ -14,7 +14,8 @@ namespace RunGroopWebApp.Controllers
         private readonly IPhotoService _photoService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
+        public RaceController(IRaceRepository raceRepository, 
+            IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             _raceRepository = raceRepository;
             _photoService = photoService;
@@ -49,7 +50,7 @@ namespace RunGroopWebApp.Controllers
                 Page = page,
                 PageSize = pageSize,
                 TotalRaces = count,
-                TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+                TotalPages = (int) Math.Ceiling(count / (double)pageSize),
                 Category = category,
             };
 

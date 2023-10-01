@@ -12,7 +12,7 @@ using RunGroopWebApp.Scraper.Services;
 
 
 
-MeetupScraper scraper = new MeetupScraper();
+MeetupScraper scraper = new MeetupScraper(false,true,true,"","");
 scraper.Run();
 
 //AtraScraper scraper = new AtraScraper();

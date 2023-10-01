@@ -15,11 +15,95 @@ namespace RunGroopWebApp.Scraper.Services
     public class MeetupScraper
     {
         private IWebDriver _driver;
-        public MeetupScraper()
+        public MeetupScraper(bool isHideChrome, bool isHideImage, bool isDisableSound, string UserAgent, string Proxy, int TimeWaitForSearchingElement = 3, int TimeWaitForLoadingPage = 5)
         {
-            _driver = new ChromeDriver();
-        }
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments(new string[]
+            {
+                "--disable-notifications",
+                //"--window-size=" + Size.X.ToString() + "," + Size.Y.ToString(),
+                "--no-sandbox",
+                "--disable-gpu",
+                "--app=https://bitly.com/",
+                "--disable-dev-shm-usage",
+                "--disable-web-security",
+                "--disable-rtc-smoothness-algorithm",
+                "--disable-webrtc-hw-decoding",
+                "--disable-webrtc-hw-encoding",
+                "--disable-webrtc-multiple-routes",
+                "--disable-webrtc-hw-vp8-encoding",
+                "--enforce-webrtc-ip-permission-check",
+                "--force-webrtc-ip-handling-policy",
+                "--ignore-certificate-errors",
+                "--disable-infobars",
+                "--disable-popup-blocking"
+            });
+            options.AddUserProfilePreference("profile.default_content_setting_values.notifications", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.plugins", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.popups", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.geolocation", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.auto_select_certificate", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.mixed_script", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.media_stream", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.media_stream_mic", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.media_stream_camera", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.protocol_handlers", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.midi_sysex", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.push_messaging", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.ssl_cert_decisions", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.metro_switch_to_desktop", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.protected_media_identifier", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.site_engagement", 1);
+            options.AddUserProfilePreference("profile.default_content_setting_values.durable_storage", 1);
+            options.AddUserProfilePreference("useAutomationExtension", true);
 
+            if (isDisableSound)
+            {
+                options.AddArgument("--mute-audio");
+            }
+            bool flag = !isHideChrome;
+            if (flag)
+            {
+                if (isHideImage)
+                {
+                    options.AddArgument("--blink-settings=imagesEnabled=false");
+                }
+            }
+            else
+            {
+                options.AddArgument("--blink-settings=imagesEnabled=false");
+                options.AddArgument("--headless");
+            }
+            bool flag3 = !string.IsNullOrEmpty(Proxy);
+            if (flag3)
+            {
+                bool flag4 = Proxy.Contains(":");
+                if (flag4)
+                {
+                    options.AddArgument("--proxy-server= " + Proxy);
+                }
+                else
+                {
+                    options.AddArgument("--proxy-server= socks5://127.0.0.1:" + Proxy);
+                }
+            }
+            bool flag5 = !string.IsNullOrEmpty(UserAgent);
+            if (flag5)
+            {
+                options.AddArgument("--user-agent=" + UserAgent);
+            }
+            bool flag6 = File.Exists("chrome\\chrome.exe");
+            if (flag6)
+            {
+                options.BinaryLocation = "chrome\\chrome.exe";
+            }
+            _driver = new ChromeDriver(service, options);
+
+            _driver.Manage().Timeouts().ImplicitWait = new TimeSpan(0, 0, TimeWaitForSearchingElement);
+            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromMinutes((double)TimeWaitForLoadingPage);
+        }
         public void Run()
         {
             GetListOfCityAndState();
