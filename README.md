@@ -4,3 +4,5 @@ We will learn how to use FluentAssertions package for testing function in C#
 
 ## FluentAssertions Package
 Let see more information for unit test package at: https://fluentassertions.com/introduction
+## Tutorials for xUnitTest
+[Youtube video on how to implement xUnit Test] (https://www.youtube.com/playlist?list=PL82C6-O4XrHeyeJcI5xrywgpfbrqdkQd4)
